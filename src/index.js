@@ -16,15 +16,36 @@ const createWindow = () => {
     frame: false,
     autoHideMenuBar: true,
     kiosk: true,
+    skipTaskbar: true,
+    minimizable: false,
+    alwaysOnTop: true,
+    resizable: false,
     webPreferences: {
       nodeIntegration: true,
     },
   });
 
+  mainWindow.setVisibleOnAllWorkspaces(true)
+
+  mainWindow.on('blur', () => {
+    mainWindow.show();
+    mainWindow.restore();
+    mainWindow.focus();
+    mainWindow.setKiosk(true);
+  });
+
+  globalShortcut.register('alt+tab', () => {
+    return false;
+  });
+
+  globalShortcut.register('alt+f4', () => {
+    return false;
+  });
+
   globalShortcut.register('CommandOrControl+Y', () => {
     // Do stuff when Y and either Command/Control is pressed.
     app.quit();
-  })
+  });
 
   // and load the index.html of the app.
   mainWindow.loadFile(path.join(__dirname, 'index.html'));
